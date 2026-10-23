@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alexa+ Student Study Assistant (Learning Prototype)</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Top App Navigation / Header -->
+  <header class="app-header">
+    <div class="header-container">
+      <div class="brand-group">
+        <div class="brand-icon">📚</div>
+        <div>
+          <h1 class="brand-title">Alexa+ Student Study Assistant</h1>
+          <p class="brand-subtitle">Interactive Student Study Companion & Task Planner</p>
+        </div>
+      </div>
+      <div class="status-badge" id="assistant-status">
+        <span class="status-dot"></span>
+        <span>Offline Simulation Mode</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Prototype Notice & Disclaimer Banner -->
+  <aside class="notice-banner" role="alert">
+    <div class="notice-content">
+      <span class="notice-icon">ℹ️</span>
+      <p>
+        <strong>Educational Prototype Notice:</strong> This web app is built for learning HTML, CSS, and JavaScript. 
+        All assistant responses are <em>locally simulated</em>. The app is <strong>not</strong> connected to Amazon Alexa+ or any live AI service.
+      </p>
+    </div>
+  </aside>
+
+  <!-- Main Dashboard Container -->
+  <main class="dashboard-wrapper">
+
+    <!-- Top Stats Overview Section -->
+    <section class="stats-section" aria-label="Study Progress Overview">
+      <div class="welcome-box">
+        <h2 id="greeting-text">Welcome back, Student! 👋</h2>
+        <p id="current-date">Loading current date...</p>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-label">Total Tasks</div>
+          <div class="stat-value" id="stat-total">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Completed</div>
+          <div class="stat-value stat-completed" id="stat-completed">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Pending</div>
+          <div class="stat-value stat-pending" id="stat-pending">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Progress</div>
+          <div class="stat-value stat-progress" id="stat-progress">0%</div>
+          <div class="progress-bar-container">
+            <div class="progress-bar-fill" id="progress-bar-fill" style="width: 0%;"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Two-Column Workspace Layout -->
+    <div class="workspace-grid">
+
+      <!-- Left Column: Study Task Manager -->
+      <section class="task-manager-panel" aria-labelledby="tasks-heading">
+        <div class="card">
+          <div class="card-header">
+            <h2 id="tasks-heading">📋 Daily Study Tasks</h2>
+            <span class="badge" id="task-count-badge">0 tasks</span>
+          </div>
+
+          <!-- Add Task Form -->
+          <form id="task-form" class="task-form">
+            <div class="form-group">
+              <label for="task-title-input">Task Description</label>
+              <input 
+                type="text" 
+                id="task-title-input" 
+                placeholder="e.g., Read Biology Chapter 4 & take notes" 
+                required 
+                maxlength="100"
+                autocomplete="off"
+              >
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="task-subject-select">Subject</label>
+                <select id="task-subject-select">
+                  <option value="General">📘 General</option>
+                  <option value="Math">📐 Mathematics</option>
+                  <option value="Science">🔬 Science</option>
+                  <option value="History">🏛️ History</option>
+                  <option value="Literature">📖 Literature</option>
+                  <option value="Coding">💻 Coding</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="task-priority-select">Priority</label>
+                <select id="task-priority-select">
+                  <option value="Medium">⚡ Medium</option>
+                  <option value="High">🔥 High</option>
+                  <option value="Low">🌱 Low</option>
+                </select>
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary" id="add-task-btn">
+              <span>➕ Add Study Task</span>
+            </button>
+          </form>
+
+          <!-- Filter Controls -->
+          <div class="task-filters">
+            <button type="button" class="filter-btn active" data-filter="all">All</button>
+            <button type="button" class="filter-btn" data-filter="pending">Pending</button>
+            <button type="button" class="filter-btn" data-filter="completed">Completed</button>
+          </div>
+
+          <!-- Task List Container -->
+          <div class="task-list-wrapper">
+            <ul id="task-list" class="task-list" aria-live="polite">
+              <!-- Dynamically populated by script.js -->
+            </ul>
+            <div id="empty-state" class="empty-state" style="display: none;">
+              <span class="empty-icon">🎯</span>
+              <p>No study tasks found here!</p>
+              <small>Add your first task above to kickstart your study session.</small>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Right Column: Simulated Study Assistant Chat -->
+      <section class="assistant-chat-panel" aria-labelledby="assistant-heading">
+        <div class="card chat-card">
+          <div class="card-header">
+            <div>
+              <h2 id="assistant-heading">🤖 Study Assistant</h2>
+              <p class="card-subtitle">Simulated Study Partner</p>
+            </div>
+            <span class="simulated-badge">Simulated AI</span>
+          </div>
+
+          <!-- Helper Prompt Chips -->
+          <div class="prompt-chips-section">
+            <p class="chips-label">Try asking:</p>
+            <div class="chips-container" id="chips-container">
+              <button type="button" class="chip-btn" data-prompt="How does the Pomodoro technique work?">⏱️ Pomodoro Technique</button>
+              <button type="button" class="chip-btn" data-prompt="Give me 3 active study tips">💡 3 Study Tips</button>
+              <button type="button" class="chip-btn" data-prompt="How do I organize my daily study schedule?">📅 Daily Schedule</button>
+              <button type="button" class="chip-btn" data-prompt="Give me some study motivation!">⚡ Quick Motivation</button>
+              <button type="button" class="chip-btn" data-prompt="What tasks do I have left today?">📝 Check My Tasks</button>
+            </div>
+          </div>
+
+          <!-- Chat Conversation Window -->
+          <div class="chat-window" id="chat-window" aria-live="polite">
+            <div class="chat-messages" id="chat-messages">
+              <!-- Messages will appear here -->
+            </div>
+            <!-- Typing Indicator (Hidden by default) -->
+            <div class="typing-indicator" id="typing-indicator" style="display: none;">
+              <span class="typing-avatar">🤖</span>
+              <div class="typing-bubble">
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Chat Input Form -->
+          <form id="chat-form" class="chat-input-form">
+            <input 
+              type="text" 
+              id="chat-input" 
+              placeholder="Ask a study question (e.g. 'How to study for math?')..." 
+              required
+              autocomplete="off"
+            >
+            <button type="submit" class="btn btn-primary" id="send-chat-btn">
+              <span>Send</span>
+            </button>
+          </form>
+
+          <footer class="chat-footer-note">
+            <small>⚠️ AI replies are simulated locally. No real cloud or Alexa+ API connection.</small>
+          </footer>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <footer class="app-footer">
+    <p>Alexa+ Student Study Assistant • Beginner HTML/CSS/JavaScript Project</p>
+    <p><small>Designed for student productivity and hands-on coding practice.</small></p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
